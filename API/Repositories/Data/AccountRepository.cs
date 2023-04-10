@@ -3,6 +3,8 @@ using API.Handlers;
 using API.Models;
 using API.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
+using System.Net;
 
 namespace API.Repositories.Data
 {
@@ -18,9 +20,48 @@ namespace API.Repositories.Data
         public async Task<int> Register(RegisterVM registerVM)
         {
             int result = 0;
+            Countries country = new Countries
+            {
+                Name = registerVM.CountryName
+            };
+            if (await context.Countries.AnyAsync(c => c.Name == country.Name))
+            {
+                country.Id = context.Countries.FirstOrDefault(c => c.Name == country.Name).Id;
+            }
+            else
+            {
+                await context.Countries.AddAsync(country);
+                result = await context.SaveChangesAsync();
+            }
+
+            Cities city = new Cities
+            {
+                Name = registerVM.CityName,
+                CountryId = country.Id
+            };
+            if (await context.Cities.AnyAsync(c => c.Name == city.Name))
+            {
+                city.Id = context.Cities.FirstOrDefault(c => c.Name == city.Name).Id;
+            }
+            else
+            {
+                await context.Cities.AddAsync(city);
+                result = await context.SaveChangesAsync();
+            }
+
+            Addresses address = new Addresses
+            {
+                Address = registerVM.AddressName,
+                PostalCode = registerVM.PostalCode,
+                CityId = city.Id,
+            };
+            await context.Addresses.AddAsync(address);
+            result = await context.SaveChangesAsync();
+
             Departments departments = new Departments
             {
-                Name = registerVM.DepartmentName
+                Name = registerVM.DepartmentName,
+                Address_Id = address.Id
             };
 
             // Bikin kondisi untuk mengecek apakah data departement sudah ada
@@ -50,32 +91,18 @@ namespace API.Repositories.Data
                 result = await context.SaveChangesAsync();
             }
 
-            Addresses addresses = new Addresses
-            {
-                Address = registerVM.AddressName
-            };
-
-            // Bikin kondisi untuk mengecek apakah data address sudah ada
-            if (await context.Addresses.AnyAsync(u => u.Address == addresses.Address))
-            {
-                addresses.Id = context.Addresses.FirstOrDefault(u => u.Address == addresses.Address).Id;
-            }
-            else
-            {
-                await context.Addresses.AddAsync(addresses);
-                result = await context.SaveChangesAsync();
-            }
-
             Employee employee = new Employee
             {
                 NIK = registerVM.NIK,
                 FirstName = registerVM.FirstName,
                 LastName = registerVM.LastName,
+                Email = registerVM.Email,
                 BirthDate = registerVM.BirthDate,
                 Gender = registerVM.Gender,
-                HiringDate = registerVM.HiringDate,
-                Email = registerVM.Email,
                 PhoneNumber = registerVM.PhoneNumber,
+                AddressId = address.Id,
+                DepartmentId = departments.Id,
+                PositionId = positions.Id
             };
             await context.Employees.AddAsync(employee);
             result = await context.SaveChangesAsync();
@@ -90,24 +117,22 @@ namespace API.Repositories.Data
 
             AccountRole accountRole = new AccountRole
             {
-                AccountNIK = registerVM.NIK,
+                AccountNIK = account.EmployeeNIK,
                 RoleId = 2
             };
-
             await context.AccountRoles.AddAsync(accountRole);
             result = await context.SaveChangesAsync();
 
             return result;
         }
-
         public async Task<bool> Login(LoginVM loginVM)
         {
             var getAccount = await context.Employees
-                .Include(e => e.Account)
-                .Select(e => new LoginVM
+                .Include(s => s.Account)
+                .Select(s => new LoginVM
                 {
-                    Email = e.Email,
-                    Password = e.Account.Password
+                    Email = s.Email,
+                    Password = s.Account.Password
                 }).SingleOrDefaultAsync(a => a.Email == loginVM.Email);
 
             if (getAccount is null)
@@ -117,34 +142,32 @@ namespace API.Repositories.Data
 
             return Hashing.ValidatePassword(loginVM.Password, getAccount.Password);
         }
-
-        public UserdataVM GetUserdata(string email)
+        public async Task<UserdataVM> GetUserdata(string email)
         {
-            var userdata = (from e in context.Employees
-                            join a in context.Accounts
-                            on e.NIK equals a.EmployeeNIK
-                            join ar in context.AccountRoles
-                            on a.EmployeeNIK equals ar.AccountNIK
-                            join r in context.Roles
-                            on ar.RoleId equals r.Id
-                            where e.Email == email
-                            select new UserdataVM
-                            {
-                                Email = e.Email,
-                                FullName = String.Concat(e.FirstName, " ", e.LastName)
-                            }).FirstOrDefault();
+            var userdata = await (from u in context.Employees
+                                  join a in context.Accounts
+                                  on u.NIK equals a.EmployeeNIK
+                                  join ar in context.AccountRoles
+                                  on a.EmployeeNIK equals ar.AccountNIK
+                                  join r in context.Roles
+                                  on ar.RoleId equals r.Id
+                                  where u.Email == email
+                                  select new UserdataVM
+                                  {
+                                      Email = u.Email,
+                                      FullName = string.Concat(u.FirstName, " ", u.LastName)
+                                  }).FirstOrDefaultAsync();
 
             return userdata;
         }
-        public List<string> GetRolesByNIK(string email)
+        public async Task<IEnumerable<string>> GetRolesById(string email)
         {
-            var getNIK = context.Employees.FirstOrDefault(e => e.Email == email);
-            return context.AccountRoles.Where(ar => ar.AccountNIK == getNIK.NIK).Join(
+            var getUserId = await context.Employees.FirstOrDefaultAsync(u => u.Email == email);
+            return await context.AccountRoles.Where(ar => ar.AccountNIK == getUserId.NIK).Join(
                 context.Roles,
                 ar => ar.RoleId,
                 r => r.Id,
-                (ar, r) => r.Name).ToList();
-
+                (ar, r) => r.Name).ToListAsync();
         }
     }
 }

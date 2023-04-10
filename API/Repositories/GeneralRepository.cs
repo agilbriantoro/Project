@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Repositories
 {
     public class GeneralRepository<Key, Entity> : IRepository<Key, Entity>
-        where Entity : class
+    where Entity : class
     {
-        private readonly MyContext context;
+        public readonly MyContext context;
 
         public GeneralRepository(MyContext context)
         {
@@ -17,7 +17,7 @@ namespace API.Repositories
         public async Task<int> Delete(Key key)
         {
             var entity = await GetById(key);
-            if (entity is null)
+            if (entity == null)
             {
                 return 0;
             }
@@ -30,7 +30,7 @@ namespace API.Repositories
             return await context.Set<Entity>().ToListAsync();
         }
 
-        public async Task<Entity>? GetById(Key? key)
+        public async Task<Entity> GetById(Key? key)
         {
             if (key is null)
             {

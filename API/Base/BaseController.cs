@@ -18,80 +18,151 @@ public class BaseController<Key, Entity, Repository> : ControllerBase
         this.repository = repository;
     }
 
+    // Index
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
-        try
+        var results = await repository.GetAll();
+        if (results is null)
         {
-            var result = await repository.GetAll();
-            return result.Count() is 0
-                ? NotFound(new { statusCode = 404, message = "Data Not Found!" })
-                : Ok(new { statusCode = 201, message = "Success", data = result });
+            //return results.Count() is 0
+            //? NotFound(new {StatusCode = 200, Massage = "Data Empty!", Data = results})
+            //:Ok(new
+            // {StatusCode = 200, Massage = "All Data Found!", Data = results});
+            return Ok(new
+            {
+                StatusCode = 200,
+                Massage = "Data Empty!",
+                Data = results
+            });
         }
-        catch (Exception e)
+        else
         {
-            return BadRequest(new { statusCode = 400, message = $"Something Wrong! : {e.Message}" });
+            return Ok(new
+            {
+                StatusCode = 200,
+                Massage = "All Data Found!",
+                Data = results
+            }); ;
         }
+    }
 
-    }
-    [HttpGet("{key}")]
-    public async Task<ActionResult> GetById(Key key)
-    {
-        try
-        {
-            var result = await repository.GetById(key);
-            return result is null
-                ? NotFound(new { statusCode = 404, message = $"Data With Id {key} Not Found!" })
-                : Ok(new { statusCode = 200, message = $"Data Found!", data = result });
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { statusCode = 400, message = $"Something Wrong! : {e.Message}" });
-        }
-    }
+    // Create
     [HttpPost]
     public async Task<ActionResult> Insert(Entity entity)
     {
         try
         {
-            var result = await repository.Insert(entity);
-            return result is 0
-                ? Conflict(new { statusCode = 409, message = "Data fail to Insert!" })
-                : Ok(new { statusCode = 200, message = "Data Saved Succesfully!" });
+            var results = await repository.Insert(entity);
+            if (results == 0)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = 409,
+                    Massage = "Add Data Filed!"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    StatusCode = 201,
+                    Massage = "Add Data Success!"
+                });
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            return BadRequest(new { statusCode = 400, message = "Something Wrong!" });
+
+            return BadRequest(new
+            {
+                StatusCode = 400,
+                Massage = "Oops!! Something Wrong!"
+            });
         }
     }
+
+    //GetById
+    [HttpGet]
+    [Route("{key}")]
+    public async Task<ActionResult> GetById(Key key)
+    {
+        var results = await repository.GetById(key);
+        if (results is null)
+        {
+            return Ok(new
+            {
+                StatusCode = 200,
+                Massage = "Data Not Found!"
+            });
+        }
+        else
+        {
+            return Ok(new
+            {
+                StatusCode = 200,
+                Massage = "Data Found!",
+                Data = results
+            });
+        }
+    }
+
+    //Update
     [HttpPut]
     public async Task<ActionResult> Update(Entity entity)
     {
-        try
+        var results = await repository.Update(entity);
+        if (results is 0)
         {
-            var result = await repository.Update(entity);
-            return result is 0
-                ? NotFound(new { statusCode = 404, message = $"Id not found!" })
-                : Ok(new { statusCode = 200, message = "Update Succesfully!" });
+            return Ok(new
+            {
+                StatusCode = 200,
+                Massage = "Update Data Filed!"
+            });
         }
-        catch
+        else
         {
-            return BadRequest(new { statusCode = 400, message = "Something Wrong!" });
+            return Ok(new
+            {
+                StatusCode = 200,
+                Massage = "Update Data Success!",
+                Data = results
+            });
         }
     }
+
+    //Delete
     [HttpDelete]
     public async Task<ActionResult> Delete(Key key)
     {
         try
         {
-            var result = await repository.Delete(key);
-            return result is 0
-                ? NotFound(new { statusCode = 404, message = $"Id {key} Data Not Found" })
-                : Ok(new { statusCode = 200, message = "Data Delete Succesfully!" });
+            var results = await repository.Delete(key);
+            if (results == 0)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = 404,
+                    Massage = "Data Not Found!"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    StatusCode = 201,
+                    Massage = "Delete Data Success!"
+                });
+            }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            return BadRequest(new { statusCode = 400, message = $"Something Wrong {e.Message}" });
+
+            return BadRequest(new
+            {
+                StatusCode = 400,
+                Massage = "Oops!! Something Wrong!"
+            });
         }
     }
 }

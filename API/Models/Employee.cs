@@ -8,7 +8,7 @@ public class Employee
 {
     [MaxLength(5), MinLength(5, ErrorMessage = "Harus 5 karakter, contoh: 12345")]
     [Key, Column("nik", TypeName = "nchar(5)")]
-    public string? NIK { get; set; }
+    public string NIK { get; set; }
 
     //[Display(Name = "First Name")]
     [Required, Column("first_name"), MaxLength(50)]
@@ -17,6 +17,11 @@ public class Employee
     //[Display(Name = "Last Name")]
     [Column("last_name"), MaxLength(50)]
     public string? LastName { get; set; }
+
+    //[Display(Name = "Birth Date")]
+    [Required, Column("birthdate")]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+    public DateTime BirthDate { get; set; }
 
     [Required, Column("gender")]
     public GenderEnum Gender { get; set; }
@@ -35,11 +40,6 @@ public class Employee
     [Required, Column("hiring_date")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateTime HiringDate { get; set; } = DateTime.Now;
-    
-    //[Display(Name = "Birth Date")]
-    [Required, Column("birthdate")]
-    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-    public DateTime BirthDate { get; set; }
 
     [Required, Column("department_id")]
     public int DepartmentId { get; set; }

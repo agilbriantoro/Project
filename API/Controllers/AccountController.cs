@@ -1,10 +1,12 @@
 ﻿using API.Base;
 using API.Models;
 using API.Repositories.Data;
+using API.Repositories.Interface;
 using API.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol.Core.Types;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -24,80 +26,47 @@ namespace API.Controllers
             this.configuration = configuration;
         }
 
-        [HttpPost]
-        [Route("Register")]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register(RegisterVM registerVM)
         {
             try
             {
-                var results = await accountRepository.Register(registerVM);
-                if (results == 0)
-                {
-                    return BadRequest(new
-                    {
-                        StatusCode = 409,
-                        Massage = "Register Filed!"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        StatusCode = 201,
-                        Massage = "Register Success!"
-                    });
-                }
+                var result = await accountRepository.Register(registerVM);
+                return result is 0
+                    ? Conflict(new { statusCode = 409, message = "Data fail to Insert!" })
+                    : Ok(new { statusCode = 200, message = "Data Saved Succesfully!" });
             }
-            catch (Exception ex)
+            catch
             {
-
-                return BadRequest(new
-                {
-                    StatusCode = 400,
-                    Massage = "Oops!! Something Wrong!"
-                });
+                return BadRequest(new { statusCode = 400, message = "Something Wrong!" });
             }
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginVM loginVM)
         {
             try
             {
-                var results = await accountRepository.Login(loginVM);
-                if (results is false)
+                var result = await accountRepository.Login(loginVM);
+                if (result is false)
                 {
-                    return BadRequest(new
-                    {
-                        StatusCode = 409,
-                        Massage = "Login Filed!"
-                    });
+                    return Conflict(new { statusCode = 409, message = "Account or Password Does not Match!" });
                 }
+                else
+                {
+                    var userdata = await accountRepository.GetUserdata(loginVM.Email);
+                    var roles = await accountRepository.GetRolesById(loginVM.Email);
 
-                var userdata = accountRepository.GetUserdata(loginVM.Email);
-                var roles = accountRepository.GetRolesByNIK(loginVM.Email);
-
-                var claims = new List<Claim>()
+                    var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, userdata.Email),
                 new Claim(ClaimTypes.Name, userdata.FullName)
             };
-
-                foreach (var item in roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, item));
-                }
-                if (userdata is null)
-                {
-                    return BadRequest(new
+                    foreach (var item in roles)
                     {
-                        StatusCode = 409,
-                        Massage = "Login Filed!"
-                    });
-                }
-                else
-                {
+                        claims.Add(new Claim(ClaimTypes.Role, item));
+                    }
+
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]));
                     var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                     var token = new JwtSecurityToken(
@@ -108,23 +77,14 @@ namespace API.Controllers
                         signingCredentials: signIn
                         );
 
-                    var generateToken = new JwtSecurityTokenHandler().WriteToken(token);
+                    var generatedToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-                    return Ok(new
-                    {
-                        StatusCode = 200,
-                        Massage = "Login Success!",
-                        Data = generateToken
-                    });
+                    return Ok(new { statusCode = 200, message = "Login Success!", data = generatedToken });
                 }
             }
             catch
             {
-                return BadRequest(new
-                {
-                    StatusCode = 400,
-                    Massage = "Oops!! Something Wrong!"
-                });
+                return BadRequest(new { statusCode = 400, message = "Something Wrong!" });
             }
         }
     }

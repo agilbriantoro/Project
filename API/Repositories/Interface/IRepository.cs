@@ -3,11 +3,16 @@
 namespace API.Repositories.Interface
 {
     public interface IRepository<Key, Entity> where Entity : class
-    {
-         Task<IEnumerable<Entity>> GetAll();
-         Task<Entity?> GetById(Key key);
-         Task<int> Insert(Entity entity);
-         Task<int> Update(Entity entity);
-         Task<int> Delete(Key key);
+    { 
+        //GetAll
+        Task<IEnumerable<Entity>> GetAll();
+        //GetById
+        Task<Entity> GetById(Key key);
+        //Create
+        Task<int> Insert(Entity entity);
+        //Update
+        Task<int> Update(Entity entity);
+        //Delete
+        Task<int> Delete(Key key);
     }
 }

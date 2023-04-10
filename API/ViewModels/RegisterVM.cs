@@ -7,8 +7,8 @@ namespace API.ViewModels
 {
     public class RegisterVM
     {
-        [MaxLength(5), MinLength(5, ErrorMessage = "Harus 5 karakter, contoh: 12345")]
-        [Key, Column("nik", TypeName = "nchar(5)")]
+        [MaxLength(5), MinLength(5, ErrorMessage = "ex: 12345")]
+        [Required(ErrorMessage = "Tidak Boleh Kosong ex: 12345")]
         public string NIK { get; set; }
 
         [Display(Name = "First Name")]
@@ -42,6 +42,15 @@ namespace API.ViewModels
 
         [Display(Name = "Address")]
         public string AddressName { get; set; }
+
+        [Display(Name = "City")]
+        public string CityName { get; set; }
+
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+
+        [Display(Name = "Country")]
+        public string CountryName { get; set; }
 
         [DataType(DataType.Password)]
         [StringLength(255, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
