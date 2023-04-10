@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-
+using Newtonsoft.Json;
 
 namespace API.Models
 {
@@ -9,9 +9,19 @@ namespace API.Models
     {
         [Key, Column("id")]
         public int Id { get; set; }
-        [Required, Column("Name", TypeName = "nchar(50)")]
+
+        [Required, Column("name")]
         public string Name { get; set; }
-        [Required, Column("Country Id")]
-        public int country_id { get; set; }
+
+        [Required, Column("country_id")]
+        public int CountryId { get; set; }
+
+        // Cardinality & Relation
+        [JsonIgnore]
+        [ForeignKey(nameof(CountryId))]
+        public Countries? Countries { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Addresses>? Addresss { get; set; }
     }
 }

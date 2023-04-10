@@ -5,31 +5,35 @@ namespace API.Contexts;
 
 public class MyContext : DbContext
 {
-   /* public MyContext(DbContextOptions<MyContext> options) : base(options)
+    public MyContext(DbContextOptions<MyContext> options) : base(options)
     {
     }
 
     // Introduce the model to the database that eventually become an entity
     public DbSet<Account> Accounts { get; set; }
     public DbSet<AccountRole> AccountRoles { get; set; }
-    public DbSet<Education> Educations { get; set; }
+    public DbSet<Addresses> Addresses { get; set; }
+    public DbSet<Cities> Cities { get; set; }
+    public DbSet<Countries> Countries { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    public DbSet<Profiling> Profilings { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<University> Universities { get; set; }
+    public DbSet<Departments> Departments { get; set; }
+    public DbSet<LeaveRequests> LeaveRequests { get; set; }
+    public DbSet<LeaveTypes> LeaveTypes { get; set; }
+    public DbSet<Roles> Roles { get; set; }
+    public DbSet<Positions> Positions { get; set; }
 
     // Fluent API
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Role>().HasData(
-            new Role
+        modelBuilder.Entity<Roles>().HasData(
+            new Roles
             {
                 Id = 1,
                 Name = "Admin"
             },
-            new Role
+            new Roles
             {
                 Id = 2,
                 Name = "User"
@@ -54,5 +58,5 @@ public class MyContext : DbContext
             .WithMany(e => e.Employees)
             .HasForeignKey(fk => fk.ManagerId)
             .OnDelete(DeleteBehavior.NoAction);
-    }*/
+    }
 }

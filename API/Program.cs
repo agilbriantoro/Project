@@ -1,62 +1,18 @@
 using API.Contexts;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure CORS
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin();
-            policy.AllowAnyHeader();
-            policy.AllowAnyMethod();
-        });
-});
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-
-/*// Configure DbContext to Sql Server Database
-var connectionString = builder.Configuration.GetConnectionString("Connection");
-builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));
-
-builder.Services.AddScoped<UniversityRepository>();
-builder.Services.AddScoped<EducationRepository>();
-builder.Services.AddScoped<AccountRepository>();
-builder.Services.AddScoped<EmployeeRepository>();
-builder.Services.AddScoped<AccountRoleRepository>();
-builder.Services.AddScoped<ProfilingsRepository>();
-builder.Services.AddScoped<RoleRepository>();*/
-
-// Configure JWT
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            //Usually, this is application base url
-            ValidateAudience = false,
-            //ValidAudience = builder.Configuration["JWT:Audience"],
-            // If the JWT is created using web service, then this could be the consumer URL
-            ValidateIssuer = false,
-            //ValidIssuer = builder.Configuration["JWT:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure DbContext to Sql Server Database
+var connectionString = builder.Configuration.GetConnectionString("Connection");
+builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
