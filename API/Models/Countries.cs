@@ -7,9 +7,9 @@ namespace API.Models
     
     public class Countries
     {
-        [Key, Column("id")]
+        [Key, Column("Id")]
         public int Id { get; set; }
-        [Required, Column("name"), MaxLength(50)]
+        [Required, Column("Name", TypeName = "nchar(50)"), MaxLength(50)]
         public string Name { get; set; }
 
     }
