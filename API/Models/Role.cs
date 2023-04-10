@@ -13,7 +13,7 @@ public class Role
     [Required, Column("name"), MaxLength(50)]
     public string Name { get; set; }
 
-   /* // Cardinality
+    // Cardinality
     [JsonIgnore]
-    public ICollection<AccountRole>? AccountRoles { get; set; }*/
+    public ICollection<AccountRole>? AccountRoles { get; set; }
 }

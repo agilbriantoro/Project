@@ -12,9 +12,9 @@ public class Account
     [Required, Column("password"), MaxLength(255)]
     public string Password { get; set; }
 
-    /*// Cardinality
+    // Cardinality
     [JsonIgnore]
     public ICollection<AccountRole>? AccountRoles { get; set; }
     [JsonIgnore]
-    public Employee? Employee { get; set; }*/
+    public Employees? Employees { get; set; }
 }

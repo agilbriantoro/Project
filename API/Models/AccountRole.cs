@@ -15,11 +15,11 @@ public class AccountRole
     [Required, Column("role_id")]
     public int RoleId { get; set; }
 
-    /*// Cardinality
+    // Cardinality
     [JsonIgnore]
     [ForeignKey(nameof(AccountNIK))]
     public Account? Account { get; set; }
     [JsonIgnore]
     [ForeignKey(nameof(RoleId))]
-    public Role? Role { get; set; }*/
+    public Role? Role { get; set; }
 }
