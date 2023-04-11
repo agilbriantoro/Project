@@ -120,31 +120,31 @@ namespace API.Migrations
                     nik = table.Column<string>(type: "nchar(5)", maxLength: 5, nullable: false),
                     first_name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     last_name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     gender = table.Column<int>(type: "int", nullable: false),
                     email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     phone_number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     hiring_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     department_id = table.Column<int>(type: "int", nullable: false),
                     position_id = table.Column<int>(type: "int", nullable: false),
                     address_id = table.Column<int>(type: "int", nullable: false),
-                    manager_id = table.Column<string>(type: "nchar(5)", nullable: true)
+                    manager_id = table.Column<string>(type: "nchar(5)", nullable: true),
+                    DepartmentsId = table.Column<int>(type: "int", nullable: true),
+                    AddressesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tb_m_employees", x => x.nik);
                     table.ForeignKey(
-                        name: "FK_tb_m_employees_tb_m_addresses_address_id",
-                        column: x => x.address_id,
+                        name: "FK_tb_m_employees_tb_m_addresses_AddressesId",
+                        column: x => x.AddressesId,
                         principalTable: "tb_m_addresses",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_tb_m_employees_tb_m_departments_department_id",
-                        column: x => x.department_id,
+                        name: "FK_tb_m_employees_tb_m_departments_DepartmentsId",
+                        column: x => x.DepartmentsId,
                         principalTable: "tb_m_departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tb_m_employees_tb_m_employees_manager_id",
                         column: x => x.manager_id,
@@ -177,14 +177,14 @@ namespace API.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PositionId = table.Column<string>(type: "nchar(5)", nullable: true)
+                    EmployeesNIK = table.Column<string>(type: "nchar(5)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tb_m_positions", x => x.id);
                     table.ForeignKey(
-                        name: "FK_tb_m_positions_tb_m_employees_PositionId",
-                        column: x => x.PositionId,
+                        name: "FK_tb_m_positions_tb_m_employees_EmployeesNIK",
+                        column: x => x.EmployeesNIK,
                         principalTable: "tb_m_employees",
                         principalColumn: "nik");
                 });
@@ -280,14 +280,14 @@ namespace API.Migrations
                 column: "Address Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tb_m_employees_address_id",
+                name: "IX_tb_m_employees_AddressesId",
                 table: "tb_m_employees",
-                column: "address_id");
+                column: "AddressesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tb_m_employees_department_id",
+                name: "IX_tb_m_employees_DepartmentsId",
                 table: "tb_m_employees",
-                column: "department_id");
+                column: "DepartmentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tb_m_employees_email_phone_number",
@@ -302,9 +302,9 @@ namespace API.Migrations
                 column: "manager_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tb_m_positions_PositionId",
+                name: "IX_tb_m_positions_EmployeesNIK",
                 table: "tb_m_positions",
-                column: "PositionId");
+                column: "EmployeesNIK");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tb_tr_account_roles_account_nik",

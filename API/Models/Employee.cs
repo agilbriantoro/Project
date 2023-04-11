@@ -60,19 +60,19 @@ public class Employee
 
     // Cardinality & Relations
     [JsonIgnore]
-    [ForeignKey(nameof(PositionId))]
+    /*[ForeignKey(nameof(PositionId))]*/
     public ICollection<Positions>? Positions { get; set; }
 
     [JsonIgnore]
-    [ForeignKey(nameof(DepartmentId))]
+    /*[ForeignKey(nameof(DepartmentId))]*/
     public Departments? Departments { get; set; }
 
     [JsonIgnore]
-    [ForeignKey(nameof(AddressId))]
+    /*[ForeignKey(nameof(AddressId))]*/
     public Addresses? Addresses { get; set; }
 
     [JsonIgnore]
-    [ForeignKey(nameof(ManagerId))]
+    /*[ForeignKey(nameof(ManagerId))]*/
     public Employee? Manager { get; set; }
 
     [JsonIgnore]

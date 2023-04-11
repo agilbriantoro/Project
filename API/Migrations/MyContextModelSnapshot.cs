@@ -177,6 +177,9 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("address_id");
 
+                    b.Property<int?>("AddressesId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("birthdate");
@@ -184,6 +187,9 @@ namespace API.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int")
                         .HasColumnName("department_id");
+
+                    b.Property<int?>("DepartmentsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -225,9 +231,9 @@ namespace API.Migrations
 
                     b.HasKey("NIK");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressesId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("DepartmentsId");
 
                     b.HasIndex("ManagerId");
 
@@ -334,17 +340,17 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("EmployeesNIK")
+                        .HasColumnType("nchar(5)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("name");
 
-                    b.Property<string>("PositionId")
-                        .HasColumnType("nchar(5)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PositionId");
+                    b.HasIndex("EmployeesNIK");
 
                     b.ToTable("tb_m_positions");
                 });
@@ -448,15 +454,11 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Addresses", "Addresses")
                         .WithMany("Employees")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressesId");
 
                     b.HasOne("API.Models.Departments", "Departments")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentsId");
 
                     b.HasOne("API.Models.Employee", "Manager")
                         .WithMany("Employees")
@@ -501,7 +503,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Employee", "Employees")
                         .WithMany("Positions")
-                        .HasForeignKey("PositionId");
+                        .HasForeignKey("EmployeesNIK");
 
                     b.Navigation("Employees");
                 });
