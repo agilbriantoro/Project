@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Repositories\Data\" />
+    <Folder Include="wwwroot\lib\dist\" />
   </ItemGroup>
 
   <ItemGroup>

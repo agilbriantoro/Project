@@ -18,6 +18,7 @@ namespace API.Models
 
         // Cardinality & Relation
         [JsonIgnore]
+        //[ForeignKey(nameof(CountryId))]
         public Countries? Countries { get; set; }
 
         [JsonIgnore]
