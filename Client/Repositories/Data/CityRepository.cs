@@ -1,9 +1,9 @@
 ﻿using Client.Models;
 using Client.Repositories;
 
-namespace API.Repositories.Data
+namespace Client.Repositories.Data
 {
-    public class CityRepository : GeneralRepository<Cities, int>
+    public class CityRepository : GeneralRepository<City, int>
     {
         public CityRepository(string request = "City/") : base(request)
         {

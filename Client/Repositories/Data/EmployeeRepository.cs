@@ -1,7 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories;
 
-namespace API.Repositories.Data
+namespace Client.Repositories.Data
 {
     public class EmployeeRepository : GeneralRepository<Employee, string>
     {

@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Client.Models;
-
-[Table("tb_m_countries")]
-
-public class Countries
+public class LeaveType
 {
     public int Id { get; set; }
     public string Name { get; set; }

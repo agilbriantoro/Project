@@ -1,9 +1,9 @@
 ﻿using Client.Models;
 using Client.Repositories;
 
-namespace API.Repositories.Data
+namespace Client.Repositories.Data
 {
-    public class RoleRepository : GeneralRepository<Roles, int>
+    public class RoleRepository : GeneralRepository<Role, int>
     {
         public RoleRepository(string request = "Role/") : base(request)
         {

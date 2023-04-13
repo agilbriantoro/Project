@@ -1,6 +1,6 @@
-﻿using API.Repositories.Data;
-using Client.Base;
+﻿using Client.Base;
 using Client.Models;
+using Client.Repositories.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers

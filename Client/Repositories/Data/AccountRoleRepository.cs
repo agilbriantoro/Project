@@ -1,7 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories;
 
-namespace Client.Data
+namespace Client.Repositories.Data
 {
     public class AccountRoleRepository : GeneralRepository<AccountRole, int>
     {

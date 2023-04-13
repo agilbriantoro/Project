@@ -2,12 +2,9 @@
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace Client.Models;
-
-[Table("tb_m_roles")]
-public class Roles
+public class Role
 {
     public int Id { get; set; }
     public string Name { get; set; }

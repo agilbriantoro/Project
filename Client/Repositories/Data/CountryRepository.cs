@@ -1,9 +1,9 @@
 ﻿using Client.Models;
 using Client.Repositories;
 
-namespace API.Repositories.Data
+namespace Client.Repositories.Data
 {
-    public class CountryRepository : GeneralRepository<Countries, int>
+    public class CountryRepository : GeneralRepository<Country, int>
     {
         public CountryRepository(string request = "Country/") : base(request)
         {

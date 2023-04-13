@@ -70,11 +70,7 @@ public class Employee
 
     [JsonIgnore]
     [ForeignKey(nameof(AddressId))]
-<<<<<<< Updated upstream
     public Address? Address { get; set; }
-=======
-    public Addresses? Address { get; set; }
->>>>>>> Stashed changes
 
     [JsonIgnore]
     [ForeignKey(nameof(ManagerId))]

@@ -1,11 +1,11 @@
 ﻿using Client.Models;
 using Client.Repositories;
 
-namespace API.Repositories.Data
+namespace Client.Repositories.Data
 {
-    public class AddressRepository : GeneralRepository<Addresses, int>
+    public class AddressRepository : GeneralRepository<Address, int>
     {
-        public AddressRepository(string request = "Addresses/") : base(request)
+        public AddressRepository(string request = "Address/") : base(request)
         {
         }
     }
