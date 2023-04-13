@@ -20,7 +20,7 @@ namespace API.Repositories.Data
         public async Task<int> Register(RegisterVM registerVM)
         {
             int result = 0;
-            Countries country = new Countries
+            Country country = new Country
             {
                 Name = registerVM.CountryName
             };
@@ -34,7 +34,7 @@ namespace API.Repositories.Data
                 result = await context.SaveChangesAsync();
             }
 
-            Cities city = new Cities
+            City city = new City
             {
                 Name = registerVM.CityName,
                 CountryId = country.Id
@@ -49,16 +49,16 @@ namespace API.Repositories.Data
                 result = await context.SaveChangesAsync();
             }
 
-            Addresses address = new Addresses
+            Address address = new Address
             {
-                Address = registerVM.AddressName,
+                NameAddress = registerVM.AddressName,
                 PostalCode = registerVM.PostalCode,
                 CityId = city.Id,
             };
             await context.Addresses.AddAsync(address);
             result = await context.SaveChangesAsync();
 
-            Departments departments = new Departments
+            Department departments = new Department
             {
                 Name = registerVM.DepartmentName,
                 Address_Id = address.Id
@@ -75,19 +75,19 @@ namespace API.Repositories.Data
                 result = await context.SaveChangesAsync();
             }
 
-            Positions positions = new Positions
+            Position positions = new Position
             {
                 Name = registerVM.PositionName
             };
 
             // Bikin kondisi untuk mengecek apakah data position sudah ada
-            if (await context.Positions.AnyAsync(u => u.Name == positions.Name))
+            if (await context.Position.AnyAsync(u => u.Name == positions.Name))
             {
-                positions.Id = context.Positions.FirstOrDefault(u => u.Name == positions.Name).Id;
+                positions.Id = context.Position.FirstOrDefault(u => u.Name == positions.Name).Id;
             }
             else
             {
-                await context.Positions.AddAsync(positions);
+                await context.Position.AddAsync(positions);
                 result = await context.SaveChangesAsync();
             }
 
@@ -96,13 +96,15 @@ namespace API.Repositories.Data
                 NIK = registerVM.NIK,
                 FirstName = registerVM.FirstName,
                 LastName = registerVM.LastName,
-                Email = registerVM.Email,
                 BirthDate = registerVM.BirthDate,
                 Gender = registerVM.Gender,
+                Email = registerVM.Email,
                 PhoneNumber = registerVM.PhoneNumber,
-                AddressId = address.Id,
+                HiringDate = registerVM.HiringDate,
                 DepartmentId = departments.Id,
-                PositionId = positions.Id
+                PositionId = positions.Id,
+                AddressId = address.Id,
+                ManagerId = registerVM.NIK
             };
             await context.Employees.AddAsync(employee);
             result = await context.SaveChangesAsync();

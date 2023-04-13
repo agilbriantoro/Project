@@ -1,10 +1,8 @@
-﻿using API.ViewModels;
-using Client.Base;
+﻿using Client.Base;
 using Client.Models;
 using Client.Repositories.Data;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 
 
 namespace Client.Controllers
@@ -32,12 +30,13 @@ namespace Client.Controllers
         public async Task<IActionResult> Register(Account account)
         {
             var result = await _accountRepository.Post(account);
-            if (result.StatusCode == "200")
+            if (result.StatusCode == 200)
             {
                 RedirectToAction("Index");
             }
             return View();
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -53,12 +52,12 @@ namespace Client.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            else if (result.StatusCode == "409")
+            else if (result.StatusCode == 409)
             {
                 ModelState.AddModelError(string.Empty, result.Message);
                 return View();
             }
-            else if (result.StatusCode == "200")
+            else if (result.StatusCode == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
                 return RedirectToAction("Index", "Home");

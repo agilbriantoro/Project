@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Models;
 
 [Table("tb_m_departments")]
-public class Departments
+public class Department
 {
     [Key, Column("Id")]
     public int Id { get; set; }
@@ -19,7 +19,7 @@ public class Departments
     // Cardinality & Relation
     [JsonIgnore]
     [ForeignKey(nameof(Address_Id))]
-    public Addresses? Addresses { get; set; }
+    public Address? Address { get; set; }
 
     [JsonIgnore]
     public ICollection<Employee>? Employees { get; set; }

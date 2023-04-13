@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Models
 {
     [Table("tb_m_countries")]
     
-    public class Countries
+    public class Country
     {
         [Key, Column("id")]
         public int Id { get; set; }
@@ -17,6 +17,6 @@ namespace API.Models
 
         // Cardinality
         [JsonIgnore]
-        public ICollection<Cities>? Cities { get; set; }
+        public ICollection<City>? Cities { get; set; }
     }
 }

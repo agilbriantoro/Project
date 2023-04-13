@@ -24,5 +24,5 @@ public class AccountRole
 
     [JsonIgnore]
     [ForeignKey(nameof(RoleId))]
-    public Roles? Role { get; set; }
+    public Role? Role { get; set; }
 }

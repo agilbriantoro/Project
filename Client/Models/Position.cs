@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Client.Models;
-[Table("tb_m_positions")]
-public class Positions
+public class Position
 {
     public int Id { get; set; }
+
     public string Name { get; set; }
 }

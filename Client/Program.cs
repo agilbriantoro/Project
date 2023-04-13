@@ -14,37 +14,40 @@ builder.Services.AddSession(option =>
     option.IdleTimeout = TimeSpan.FromMinutes(5);
 });
 
-/*// Configure DbContext to Sql Server Database
-var connectionString = builder.Configuration.GetConnectionString("Connection");
-builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));*/
-
-// Dependensi Injections
-
+// Dependency Injection
 builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<AccountRoleRepository>();
+builder.Services.AddScoped<AddressRepository>();
+builder.Services.AddScoped<CityRepository>();
+builder.Services.AddScoped<CountryRepository>();
+builder.Services.AddScoped<DepartmentRepository>();
+builder.Services.AddScoped<EmployeeRepository>();
+builder.Services.AddScoped<LeaveRequestRepository>();
+builder.Services.AddScoped<LeaveTypeRepository>();
+builder.Services.AddScoped<PositionRepository>();
+builder.Services.AddScoped<RoleRepository>();
 
-
-// Configurasi JWT
+// Configure JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
-        options.TokenValidationParameters = new()
+        options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["JWT:Audience"],
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            //Usually, this is application base url
+            ValidateAudience = false,
+            //ValidAudience = builder.Configuration["JWT:Audience"],
+            // If the JWT is created using web service, then this could be the consumer URL
+            ValidateIssuer = false,
+            //ValidIssuer = builder.Configuration["JWT:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };
     });
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -59,11 +62,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
 app.UseSession();
-
-app.UseSession();
-// Memasang Token didalam Header
 app.Use(async (context, next) =>
 {
     var JWToken = context.Session.GetString("JWToken");
@@ -74,8 +73,9 @@ app.Use(async (context, next) =>
     await next();
 });
 
-
 app.UseAuthentication();
+
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
