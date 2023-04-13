@@ -18,4 +18,8 @@ public class Position
 
     [JsonIgnore]
     public Employee? Employee { get; set; }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

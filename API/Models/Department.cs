@@ -19,7 +19,11 @@ public class Department
     // Cardinality & Relation
     [JsonIgnore]
     [ForeignKey(nameof(Address_Id))]
+<<<<<<< Updated upstream
     public Address? Address { get; set; }
+=======
+    public Addresses? Addres { get; set; }
+>>>>>>> Stashed changes
 
     [JsonIgnore]
     public ICollection<Employee>? Employees { get; set; }

@@ -12,7 +12,11 @@ public class MyContext : DbContext
     // Introduce the model to the database that eventually become an entity
     public DbSet<Account> Accounts { get; set; }
     public DbSet<AccountRole> AccountRoles { get; set; }
+<<<<<<< Updated upstream
     public DbSet<Address> Addresses { get; set; }
+=======
+    public DbSet<Addresses> Addresses { get; set; }
+>>>>>>> Stashed changes
     public DbSet<City> Cities { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Employee> Employees { get; set; }
@@ -20,7 +24,11 @@ public class MyContext : DbContext
     public DbSet<LeaveRequest> LeaveRequests { get; set; }
     public DbSet<LeaveType> LeaveTypes { get; set; }
     public DbSet<Role> Roles { get; set; }
+<<<<<<< Updated upstream
     public DbSet<Position> Position { get; set; }
+=======
+    public DbSet<Position> Positions { get; set; }
+>>>>>>> Stashed changes
 
     // Fluent API
     protected override void OnModelCreating(ModelBuilder modelBuilder)

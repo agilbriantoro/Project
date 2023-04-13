@@ -80,6 +80,7 @@ namespace API.Repositories.Data
                 Name = registerVM.PositionName
             };
 
+<<<<<<< Updated upstream
             // Bikin kondisi untuk mengecek apakah data position sudah ada
             if (await context.Position.AnyAsync(u => u.Name == positions.Name))
             {
@@ -91,18 +92,24 @@ namespace API.Repositories.Data
                 result = await context.SaveChangesAsync();
             }
 
+=======
+>>>>>>> Stashed changes
             Employee employee = new Employee
             {
                 NIK = registerVM.NIK,
                 FirstName = registerVM.FirstName,
                 LastName = registerVM.LastName,
-                Email = registerVM.Email,
                 BirthDate = registerVM.BirthDate,
                 Gender = registerVM.Gender,
+                Email = registerVM.Email,
                 PhoneNumber = registerVM.PhoneNumber,
-                AddressId = address.Id,
+                HiringDate = registerVM.HiringDate,
                 DepartmentId = departments.Id,
                 PositionId = positions.Id,
+<<<<<<< Updated upstream
+=======
+                AddressId = address.Id,
+>>>>>>> Stashed changes
                 ManagerId = registerVM.NIK
             };
             await context.Employees.AddAsync(employee);

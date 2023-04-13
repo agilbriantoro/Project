@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230411025954_InitialCommit")]
-    partial class InitialCommit
+    [Migration("20230413134545_FirstCommit")]
+    partial class FirstCommit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,7 +99,7 @@ namespace API.Migrations
                     b.ToTable("tb_m_addresses");
                 });
 
-            modelBuilder.Entity("API.Models.Cities", b =>
+            modelBuilder.Entity("API.Models.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,7 +124,7 @@ namespace API.Migrations
                     b.ToTable("tb_m_cities");
                 });
 
-            modelBuilder.Entity("API.Models.Countries", b =>
+            modelBuilder.Entity("API.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,7 +144,7 @@ namespace API.Migrations
                     b.ToTable("tb_m_countries");
                 });
 
-            modelBuilder.Entity("API.Models.Departments", b =>
+            modelBuilder.Entity("API.Models.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,9 +180,6 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("address_id");
 
-                    b.Property<int?>("AddressesId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("birthdate");
@@ -190,9 +187,6 @@ namespace API.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int")
                         .HasColumnName("department_id");
-
-                    b.Property<int?>("DepartmentsId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -234,9 +228,9 @@ namespace API.Migrations
 
                     b.HasKey("NIK");
 
-                    b.HasIndex("AddressesId");
+                    b.HasIndex("AddressId");
 
-                    b.HasIndex("DepartmentsId");
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("ManagerId");
 
@@ -247,7 +241,7 @@ namespace API.Migrations
                     b.ToTable("tb_m_employees");
                 });
 
-            modelBuilder.Entity("API.Models.LeaveRequests", b =>
+            modelBuilder.Entity("API.Models.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -314,7 +308,7 @@ namespace API.Migrations
                     b.ToTable("tb_tr_leave_requests");
                 });
 
-            modelBuilder.Entity("API.Models.LeaveTypes", b =>
+            modelBuilder.Entity("API.Models.LeaveType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -334,7 +328,7 @@ namespace API.Migrations
                     b.ToTable("tb_m_leave_type");
                 });
 
-            modelBuilder.Entity("API.Models.Positions", b =>
+            modelBuilder.Entity("API.Models.Position", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -343,22 +337,22 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("EmployeesNIK")
-                        .HasColumnType("nchar(5)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("name");
 
+                    b.Property<string>("PositionId")
+                        .HasColumnType("nchar(5)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeesNIK");
+                    b.HasIndex("PositionId");
 
                     b.ToTable("tb_m_positions");
                 });
 
-            modelBuilder.Entity("API.Models.Roles", b =>
+            modelBuilder.Entity("API.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -409,7 +403,7 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Roles", "Role")
+                    b.HasOne("API.Models.Role", "Role")
                         .WithMany("AccountRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -422,93 +416,97 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Addresses", b =>
                 {
-                    b.HasOne("API.Models.Cities", "Cities")
+                    b.HasOne("API.Models.City", "City")
                         .WithMany("Addresss")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cities");
+                    b.Navigation("City");
                 });
 
-            modelBuilder.Entity("API.Models.Cities", b =>
+            modelBuilder.Entity("API.Models.City", b =>
                 {
-                    b.HasOne("API.Models.Countries", "Countries")
+                    b.HasOne("API.Models.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Countries");
+                    b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("API.Models.Departments", b =>
+            modelBuilder.Entity("API.Models.Department", b =>
                 {
-                    b.HasOne("API.Models.Addresses", "Addresses")
+                    b.HasOne("API.Models.Addresses", "Addres")
                         .WithMany("Departments")
                         .HasForeignKey("Address_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Addresses");
+                    b.Navigation("Addres");
                 });
 
             modelBuilder.Entity("API.Models.Employee", b =>
                 {
-                    b.HasOne("API.Models.Addresses", "Addresses")
+                    b.HasOne("API.Models.Addresses", "Address")
                         .WithMany("Employees")
-                        .HasForeignKey("AddressesId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("API.Models.Departments", "Departments")
+                    b.HasOne("API.Models.Department", "Department")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentsId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Models.Employee", "Manager")
                         .WithMany("Employees")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("Addresses");
+                    b.Navigation("Address");
 
-                    b.Navigation("Departments");
+                    b.Navigation("Department");
 
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("API.Models.LeaveRequests", b =>
+            modelBuilder.Entity("API.Models.LeaveRequest", b =>
                 {
-                    b.HasOne("API.Models.Employee", "Employees")
+                    b.HasOne("API.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeNIK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.LeaveTypes", "LeaveTypes")
-                        .WithOne("LeaveRequests")
-                        .HasForeignKey("API.Models.LeaveRequests", "LeaveTypeId")
+                    b.HasOne("API.Models.LeaveType", "LeaveType")
+                        .WithOne("LeaveRequest")
+                        .HasForeignKey("API.Models.LeaveRequest", "LeaveTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Positions", "Positions")
-                        .WithOne("LeaveRequests")
-                        .HasForeignKey("API.Models.LeaveRequests", "PositionsId")
+                    b.HasOne("API.Models.Position", "Position")
+                        .WithOne("LeaveRequest")
+                        .HasForeignKey("API.Models.LeaveRequest", "PositionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employees");
+                    b.Navigation("Employee");
 
-                    b.Navigation("LeaveTypes");
+                    b.Navigation("LeaveType");
 
-                    b.Navigation("Positions");
+                    b.Navigation("Position");
                 });
 
-            modelBuilder.Entity("API.Models.Positions", b =>
+            modelBuilder.Entity("API.Models.Position", b =>
                 {
-                    b.HasOne("API.Models.Employee", "Employees")
+                    b.HasOne("API.Models.Employee", "Employee")
                         .WithMany("Positions")
-                        .HasForeignKey("EmployeesNIK");
+                        .HasForeignKey("PositionId");
 
-                    b.Navigation("Employees");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("API.Models.Account", b =>
@@ -523,17 +521,17 @@ namespace API.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("API.Models.Cities", b =>
+            modelBuilder.Entity("API.Models.City", b =>
                 {
                     b.Navigation("Addresss");
                 });
 
-            modelBuilder.Entity("API.Models.Countries", b =>
+            modelBuilder.Entity("API.Models.Country", b =>
                 {
                     b.Navigation("Cities");
                 });
 
-            modelBuilder.Entity("API.Models.Departments", b =>
+            modelBuilder.Entity("API.Models.Department", b =>
                 {
                     b.Navigation("Employees");
                 });
@@ -547,17 +545,17 @@ namespace API.Migrations
                     b.Navigation("Positions");
                 });
 
-            modelBuilder.Entity("API.Models.LeaveTypes", b =>
+            modelBuilder.Entity("API.Models.LeaveType", b =>
                 {
-                    b.Navigation("LeaveRequests");
+                    b.Navigation("LeaveRequest");
                 });
 
-            modelBuilder.Entity("API.Models.Positions", b =>
+            modelBuilder.Entity("API.Models.Position", b =>
                 {
-                    b.Navigation("LeaveRequests");
+                    b.Navigation("LeaveRequest");
                 });
 
-            modelBuilder.Entity("API.Models.Roles", b =>
+            modelBuilder.Entity("API.Models.Role", b =>
                 {
                     b.Navigation("AccountRoles");
                 });

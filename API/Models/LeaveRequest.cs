@@ -56,7 +56,11 @@ public class LeaveRequest
     public Employee? Employee { get; set; }
 
     [JsonIgnore]
+<<<<<<< Updated upstream
     [ForeignKey(nameof(PositionId))]
+=======
+    [ForeignKey(nameof(PositionsId))]
+>>>>>>> Stashed changes
     public Position? Position { get; set; }
 
     [JsonIgnore]
