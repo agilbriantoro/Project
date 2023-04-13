@@ -8,7 +8,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentController : BaseController<int, Departments, DepartmentRepository>
+    public class DepartmentController : BaseController<int, Department, DepartmentRepository>
     {
         public DepartmentController(DepartmentRepository repository) : base(repository)
         {

@@ -43,6 +43,7 @@ public class Employee
 
     [Required, Column("department_id")]
     public int DepartmentId { get; set; }
+
     [Required, Column("position_id")]
     public int PositionId { get; set; }
 
@@ -60,19 +61,19 @@ public class Employee
 
     // Cardinality & Relations
     [JsonIgnore]
-    /*[ForeignKey(nameof(PositionId))]*/
-    public ICollection<Positions>? Positions { get; set; }
+    [ForeignKey(nameof(PositionId))]
+    public ICollection<Position>? Positions { get; set; }
 
     [JsonIgnore]
-    /*[ForeignKey(nameof(DepartmentId))]*/
-    public Departments? Departments { get; set; }
+    [ForeignKey(nameof(DepartmentId))]
+    public Department? Department { get; set; }
 
     [JsonIgnore]
-    /*[ForeignKey(nameof(AddressId))]*/
-    public Addresses? Addresses { get; set; }
+    [ForeignKey(nameof(AddressId))]
+    public Address? Address { get; set; }
 
     [JsonIgnore]
-    /*[ForeignKey(nameof(ManagerId))]*/
+    [ForeignKey(nameof(ManagerId))]
     public Employee? Manager { get; set; }
 
     [JsonIgnore]

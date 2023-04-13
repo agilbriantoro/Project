@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Models;
 [Table("tb_m_positions")]
-public class Positions
+public class Position
 {
     [Key, Column("id")]
     public int Id { get; set; }
@@ -14,8 +14,8 @@ public class Positions
 
     // Cardinality 
     [JsonIgnore]
-    public LeaveRequests? LeaveRequests { get; set; }
+    public LeaveRequest? LeaveRequest { get; set; }
 
     [JsonIgnore]
-    public Employee? Employees { get; set; }
+    public Employee? Employee { get; set; }
 }

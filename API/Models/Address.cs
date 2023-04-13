@@ -5,13 +5,13 @@ using System.Text.Json.Serialization;
 namespace API.Models
 {
     [Table("tb_m_addresses")]
-    public class Addresses
+    public class Address
     {
         [Key, Column("id")]
         public int Id { get; set; }
 
         [Required , Column ("address")]
-        public string Address { get; set; }
+        public string NameAddress { get; set; }
 
         [Required, Column("postal_code")]
         public string PostalCode { get; set; }
@@ -22,12 +22,12 @@ namespace API.Models
         // Cardinality & Relation
         [JsonIgnore]
         [ForeignKey(nameof(CityId))]
-        public Cities? Cities { get; set; }
+        public City? City { get; set; }
 
         [JsonIgnore]
         public ICollection<Employee>? Employees { get; set; }
 
         [JsonIgnore]
-        public ICollection<Departments>? Departments { get; set;}
+        public ICollection<Department>? Departments { get; set;}
     }
 }

@@ -25,7 +25,6 @@ public class Employee
         Male,
         Female
     }
-
 }
 
 

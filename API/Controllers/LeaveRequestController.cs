@@ -8,7 +8,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LeaveRequestController : BaseController<int, LeaveRequests, LeaveRequestRepository>
+    public class LeaveRequestController : BaseController<int, LeaveRequest, LeaveRequestRepository>
     {
         public LeaveRequestController(LeaveRequestRepository repository) : base(repository)
         {

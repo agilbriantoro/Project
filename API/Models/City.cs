@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Models
 {
     [Table("tb_m_cities")]
-    public class Cities
+    public class City
     {
         [Key, Column("id")]
         public int Id { get; set; }
@@ -18,10 +18,10 @@ namespace API.Models
 
         // Cardinality & Relation
         [JsonIgnore]
-        //[ForeignKey(nameof(CountryId))]
-        public Countries? Countries { get; set; }
+        [ForeignKey(nameof(CountryId))]
+        public Country? Country { get; set; }
 
         [JsonIgnore]
-        public ICollection<Addresses>? Addresss { get; set; }
+        public ICollection<Address>? Addresss { get; set; }
     }
 }

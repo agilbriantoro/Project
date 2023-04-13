@@ -12,28 +12,28 @@ public class MyContext : DbContext
     // Introduce the model to the database that eventually become an entity
     public DbSet<Account> Accounts { get; set; }
     public DbSet<AccountRole> AccountRoles { get; set; }
-    public DbSet<Addresses> Addresses { get; set; }
-    public DbSet<Cities> Cities { get; set; }
-    public DbSet<Countries> Countries { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<City> Cities { get; set; }
+    public DbSet<Country> Countries { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    public DbSet<Departments> Departments { get; set; }
-    public DbSet<LeaveRequests> LeaveRequests { get; set; }
-    public DbSet<LeaveTypes> LeaveTypes { get; set; }
-    public DbSet<Roles> Roles { get; set; }
-    public DbSet<Positions> Positions { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<LeaveRequest> LeaveRequests { get; set; }
+    public DbSet<LeaveType> LeaveTypes { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Position> Position { get; set; }
 
     // Fluent API
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Roles>().HasData(
-            new Roles
+        modelBuilder.Entity<Role>().HasData(
+            new Role
             {
                 Id = 1,
                 Name = "Admin"
             },
-            new Roles
+            new Role
             {
                 Id = 2,
                 Name = "User"
