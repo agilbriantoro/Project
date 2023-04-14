@@ -27,12 +27,12 @@ namespace Client.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(Account account)
+        public async Task<IActionResult> Register(RegisterVM registerVM)
         {
-            var result = await _accountRepository.Post(account);
+            var result = await _accountRepository.Register(registerVM);
             if (result.StatusCode == 200)
             {
-                RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
